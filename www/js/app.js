@@ -6,6 +6,19 @@
 angular.module('starter', ['ionic', 'ionic.contrib.ui.tinderCards'])
 
 
+.config(function($stateProvider, $urlRouterProvider) {
+  $stateProvider
+    .state('index', {
+      url: '/',
+      templateUrl: 'home.html'
+    })
+    .state('cards', {
+      url: '/cards',
+      templateUrl: 'cards.html'
+    });
+  $urlRouterProvider.otherwise('/');
+})
+
 .directive('noScroll', function() {
   return {
     restrict: 'A',
@@ -19,10 +32,13 @@ angular.module('starter', ['ionic', 'ionic.contrib.ui.tinderCards'])
 
 .controller('CardsCtrl', function($scope) {
   var cardTypes = [
-    { image: 'img/pic2.png', title: 'So much grass $hippster'},
-    { image: 'img/pic3.png', title: 'Way too much Sand, right?'},
-    { image: 'img/pic4.png', title: 'Beautiful sky from wherever'}
+    { image: 'http://placehold.it/500x500', title: 'So much grass #hippster'},
+    { image: 'http://placehold.it/500x500', title: 'Way too much Sand, right?'},
+    { image: 'http://placehold.it/500x500', title: 'Beautiful sky from wherever'}
   ];
+
+  // controls whether we are showing the cards or not
+  $scope.showCards = false;
 
   $scope.cards = [];
 
