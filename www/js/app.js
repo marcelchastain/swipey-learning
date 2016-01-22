@@ -12,6 +12,10 @@ angular.module('starter', ['ionic', 'ionic.contrib.ui.tinderCards'])
       url: '/',
       templateUrl: 'home.html'
     })
+    .state('addCard', {
+      url: '/add-cards',
+      templateUrl: 'add-cards.html'
+    })
     .state('cards', {
       url: '/cards',
       templateUrl: 'cards.html'
@@ -32,13 +36,23 @@ angular.module('starter', ['ionic', 'ionic.contrib.ui.tinderCards'])
 
 .controller('CardsCtrl', function($scope) {
   var cardTypes = [
-    { image: 'http://placehold.it/500x500', title: 'So much grass #hippster'},
-    { image: 'http://placehold.it/500x500', title: 'Way too much Sand, right?'},
-    { image: 'http://placehold.it/500x500', title: 'Beautiful sky from wherever'}
+    { image: 'http://placehold.it/250x250',
+      question: 'Who was the first president of the United States?',
+      answer: 'George Washington'
+    },
+    { image: 'http://placehold.it/250x250',
+      question: 'How many states are there in the United States?',
+      answer: '50'
+    },
+    { image: 'http://placehold.it/250x250',
+      question: 'What is Batman\'s real name?',
+      answer: 'Bruce Wayne'
+    }
   ];
 
   // controls whether we are showing the cards or not
   $scope.showCards = false;
+  $scope.newCardData = {};
 
   $scope.cards = [];
 
@@ -64,6 +78,28 @@ angular.module('starter', ['ionic', 'ionic.contrib.ui.tinderCards'])
     $scope.cards.splice(index, 1);
     console.log('Card removed');
   };
+
+  $scope.addQuestion = function(question, answer) {
+    // if the user failed to provide question or answer, display a browser alert message
+    if (!question || !answer) {
+      window.alert('Question and Answer must be provided.');
+    }
+
+    // create a data structure similar to the existing cards/questions
+    var newQuestion = {
+      image: 'http://placehold.it/250x250',
+      question: question,
+      answer: answer
+    };
+
+    // add it to the existing list of questions
+    $scope.cards.push(newQuestion);
+
+    // clear out the form inputs so they can add the next question
+    $scope.newCardData.question = '';
+    $scope.newCardData.answer = '';
+  }
+
 })
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {

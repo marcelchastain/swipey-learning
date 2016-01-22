@@ -26,15 +26,20 @@
     <script src="js/app.js"></script>
   </head>
 
+  <!-------- BODY ---------->
   <body ng-app="starter" no-scroll>
-
     <div ng-controller="CardsCtrl">
       <ion-nav-view animation="slide-left-right"></ion-nav-view>
     </div>
 
+  </body>
+  <!-------- BODY ---------->
 
-    <!-- home.html -->
-    <script id="home.html" type="text/ng-template">
+
+
+
+  <!-- home.html -->
+  <script id="home.html" type="text/ng-template">
     <ion-view>
 
       <!-- ng-cloak is used to hide content until the page is fully loaded, preventing a "Flash of Unstyled Content", or FOUC -->
@@ -54,7 +59,7 @@
             <li>* Swipe RIGHT for each correct answer, swipe LEFT for incorrect!</li>
           </ul>
 
-          <a class="button button-positive button-full icon-right ion-chevron-right" href="#/cards">
+          <a class="button button-positive button-full icon-right ion-chevron-right" href="#/add-cards">
             Start adding questions
           </a>
 
@@ -62,39 +67,84 @@
       </ion-pane>
 
     </ion-view>
-    </script>
+  </script>
 
-    <!-- cards.html  -->
-    <script id="cards.html" type="text/ng-template">
+
+  <!-- add-cards.html -->
+  <script id="add-cards.html" type="text/ng-template">
+  <ion-view>
+    <ion-header-bar class="bar-calm">
+      <h1 class="title">Flashcard Alpha Omega</h1>
+    </ion-header-bar>
+    <div class="bar bar-subheader">
+      <h2 class="title">Add Questions & Answers</h2>
+    </div>
+
+    <ion-content class="has-header has-subheader">
+      <form ng-submit="addQuestion(newCardData.question, newCardData.answer)">
+        <div class="list">
+          <label class="item item-input">
+            <input type="text" placeholder="Flashcard Question" ng-model="newCardData.question">
+          </label>
+          <label class="item item-input">
+            <input type="text" placeholder="Answer" ng-model="newCardData.answer">
+          </label>
+        </div>
+        <button type="submit" class="button button-positive">Add Question</button>
+
+        <a class="button button-balanced pull-right" href="#/cards">Start Test</a>
+      </form>
+
+
+      <div style="margin-top: 15px; font-weight: bold;">Questions:</div>
+      <div ng-repeat="card in cards" style="border: 1px solid grey;">
+        <div>Question: {{ card.question }}</div>
+        <div>Answer: {{ card.answer }}</div>
+        <div><a class="small" href ng-click="cards.splice($index, 1)">(Delete Question)</a></div>
+      </div>
+    </ion-content>
+
+  </ion-view>
+  </script>
+
+  <!-- cards.html  -->
+  <script id="cards.html" type="text/ng-template">
     <ion-view>
-      <ion-header-bar class="bar-calm">
-        <h1 class="title">Flashcard Alpha Omega</h1>
-      </ion-header-bar>
+      <ion-nav-bar class="bar-calm">
+        <ion-nav-back-button class="button-clear">
+          <i class="ion-arrow-left-c"></i> Back
+        </ion-nav-back-button>
+        <ion-nav-title>Flashcard Alpha Omega</ion-nav-title>
+      </ion-nav-bar>
+
 
       <td-cards>
         <td-card id="td-card" ng-repeat="card in cards"
                  on-destroy="cardDestroyed($index)"
                  on-swipe-left="cardSwipedLeft($index)"
                  on-swipe-right="cardSwipedRight($index)"
-                 on-partial-swipe="cardPartialSwipe(amt)">
-          <div class="title">
-            {{ card.title }}
+                 on-partial-swipe="cardPartialSwipe(amt)"
+                 ng-click="card.showAnswer = !card.showAnswer"
+                  style="cursor: pointer; cursor: hand;">
+
+          <div class="title question" ng-hide="card.showAnswer">
+            {{ card.question }}
           </div>
+          <div class="title answer" ng-show="card.showAnswer" ng-click="card.showAnswer = false">
+            {{ card.answer }}
+          </div>
+
           <div class="image">
             <div class="no-text overlayBox">
-              <div class="noBox boxed">Trash</div>
+              <div class="noBox boxed">Wrong</div>
             </div>
-            <img ng-src="{{ card.image }}">
+            <!--img ng-src="{{ card.image }}"-->
             <div class="yes-text overlayBox">
-              <div class="yesBox boxed" id="centerme">Save</div>
+              <div class="yesBox boxed" id="centerme">Right!</div>
             </div>
           </div>
         </td-card>
       </td-cards>
     </ion-view>
-    </script>
-
-
-
-  </body>
+  </script>
 </html>
